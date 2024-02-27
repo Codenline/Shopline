@@ -5,6 +5,8 @@
     <class>Models.DadosItemVenda</class>
     <class>Models.Vendas</class>
     <class>Models.Produtos</class>
+    <class>Models.Produtoscomanda</class>
+    <class>Models.Comandas</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:sqlite:C:\Projetos\shopline\src\META-INF\shopline.db"/>
       <property name="javax.persistence.jdbc.user" value=""/>

@@ -1,6 +1,7 @@
 // Classe de controller para gerencia o banco de dados apartir das entitys
 package Controllers;
 
+import Models.Comandas;
 import Models.Produtos;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -13,36 +14,31 @@ import javax.persistence.TypedQuery;
  *
  * @author Andre.infra
  */
-public class ProdutoController {
+public class ComandaController {
 
     private final EntityManagerFactory emf = Persistence.createEntityManagerFactory("shopLinePU");
     private final EntityManager em = emf.createEntityManager();
 
     // Procura por um produto com um ID especifico
-    public Produtos findOne(int id) {
+    public  Comandas findOne(int id) {
         em.getTransaction().begin();
-        Produtos entity = em.find(Produtos.class, 1);
+        Comandas entity = em.find(Comandas.class, 1);
         em.getTransaction().commit();
 
-        Integer codigo = entity.getCodigo();
-        String nome = entity.getNome();
-        Integer unidade = entity.getUnidade();
-        Double preco = entity.getPreco();
-        Integer quantidadeDisponivel = entity.getQuantidadeDisponivel();
-        String dataUltimaVenda = entity.getDataUltimaVenda();
+        Integer IdComanda = entity.getIdComanda();
+        String NomeCliente = entity.getNomeCliente();
+        String Status = entity.getStatus();
+
 
         if (entity != null) {
 
-            Produtos produto = new Produtos();
-            produto.setCodigo(codigo);
-            produto.setNome(nome);
-            produto.setUnidade(unidade);
-            produto.setPreco(preco);
-            produto.setQuantidadeDisponivel(quantidadeDisponivel);
-            produto.setDataUltimaVenda(dataUltimaVenda);
+            Comandas Comanda = new Comandas();
+            Comanda.setIdComanda(IdComanda);
+            Comanda.setNomeCliente(NomeCliente);
+            Comanda.setStatus(Status);
 
             em.close();
-            return produto;
+            return Comanda;
 
         } else {
             System.out.println("Produto não encontrado.");
@@ -55,7 +51,7 @@ public class ProdutoController {
     public int ultimoCódigo(){
         int id;
         em.getTransaction().begin();
-        TypedQuery<Integer> query = em.createQuery("SELECT MAX(e.codigo) FROM Produtos e", Integer.class);
+        TypedQuery<Integer> query = em.createQuery("SELECT MAX(e.codigo) FROM comandas e", Integer.class);
         id = query.getSingleResult();
         if(em.getTransaction() != null && em.getTransaction().isActive()){
         em.getTransaction().rollback();
@@ -70,20 +66,19 @@ public class ProdutoController {
         return id;
     }
     
-    public Produtos findProdutoByCodigo(int codigo){
-       String jpql = "SELECT p FROM Produtos p WHERE p.codigo = :codigo";
-        Produtos proutoFinal;
+    public Comandas findByNomeCliente(int NomeCliente){
+       String jpql = "SELECT p FROM comandas p WHERE p.nome_cliente = :nome_cliente";
+        Comandas ComandaFinal;
     em.getTransaction().begin();  
-    var query = em.createQuery(jpql, Produtos.class);
-    query.setParameter("codigo", codigo);
+    var query = em.createQuery(jpql, Comandas.class);
+    query.setParameter("nome_cliente", NomeCliente);
 
-    List<Produtos> resultados = query.getResultList();
+    List<Comandas> resultados = query.getResultList();
 
     em.getTransaction().commit();
-    
-    proutoFinal = resultados.get(0);
+    ComandaFinal = resultados.get(0);
    
-    return proutoFinal;
+    return ComandaFinal;
     }
     
     public void diminiorEtoque(List<Produtos> listaDeProdutos) {
@@ -113,33 +108,29 @@ public class ProdutoController {
     }
 
     // Lista todos os produtos da base
-    public List<Produtos> findMany() {
+    public List<Comandas> findMany() {
        
         em.getTransaction().begin();
 
         String jpql = "SELECT p FROM Produtos p"; // Consulta JPQL para selecionar todos os registros
-        TypedQuery<Produtos> query = em.createQuery(jpql, Produtos.class);
+        TypedQuery<Comandas> query = em.createQuery(jpql, Comandas.class);
 
-        List<Produtos> produtos = query.getResultList(); // Obtém todos os registros da tabela
+        List<Comandas> Comandas = query.getResultList(); // Obtém todos os registros da tabela
 
         em.getTransaction().commit();
         em.close();
         emf.close();
-        return produtos;
+        return Comandas;
     }
 
     // Cria uma nova entry de produto.
-    public void createOne(int codigo, String nome, int unidade, double preco, int quantidadeDisponivel, String dataUltimaVenda) {
+    public void createOne(String NomeCliente) {
 
-        Produtos novoProduto = new Produtos();
-        novoProduto.setCodigo(codigo);
-        novoProduto.setNome(nome);
-        novoProduto.setUnidade(unidade);
-        novoProduto.setPreco(preco);
-        novoProduto.setQuantidadeDisponivel(quantidadeDisponivel);
-        novoProduto.setDataUltimaVenda(dataUltimaVenda);
+        Comandas NovaComanda = new Comandas();
+        NovaComanda.setNomeCliente(NomeCliente);
+        NovaComanda.setStatus("aberto");
         em.getTransaction().begin();
-        em.persist(novoProduto);
+        em.persist(NovaComanda);
         em.getTransaction().commit();
         em.close();
     }
@@ -148,9 +139,9 @@ public class ProdutoController {
     public void deleteOne(int id) {
         em.getTransaction().begin();
 
-        Produtos produtoDeleted = em.find(Produtos.class, id);
-        if (produtoDeleted != null) {
-            em.remove(produtoDeleted);
+        Comandas ComadnaDeleted = em.find(Comandas.class, id);
+        if (ComadnaDeleted != null) {
+            em.remove(ComadnaDeleted);
             em.getTransaction().commit();
             em.close();
         }
