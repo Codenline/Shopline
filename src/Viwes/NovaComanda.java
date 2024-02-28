@@ -4,21 +4,42 @@
  */
 package Viwes;
 
+import Controllers.ComandaController;
 import Controllers.ProdutoController;
+import Controllers.ProdutosComandaController;
+import Models.Comandas;
 import Models.Produtos;
+import Models.TableModel;
+import java.awt.Color;
+import java.awt.Font;
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.JTable;
 
 /**
  *
  * @author andre
  */
 public class NovaComanda extends javax.swing.JFrame {
-    private ProdutoController ProdutoControl  = new ProdutoController();
+
+    private ProdutoController ProdutoControl = new ProdutoController();
+    private static List<Produtos> listaDeProdutos = new ArrayList<>();
+    private static TableModel modelo = new TableModel(listaDeProdutos);
+
     /**
      * Creates new form NovaComanda
      */
     public NovaComanda() {
         initComponents();
+        JTable tabela = new JTable(modelo);
+        tabela.setFont(new Font("Arial", Font.PLAIN, 18));
+        tabela.setShowVerticalLines(true);
+        tabela.setShowHorizontalLines(true);
+        tabela.setGridColor(Color.gray);
+        // Adicione a tabela a um JScrollPane (opcional)
+        jScrollPane1.setViewportView(tabela);
     }
 
     /**
@@ -32,25 +53,30 @@ public class NovaComanda extends javax.swing.JFrame {
 
         NovaComandaTitulo = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
-        jTextField1 = new javax.swing.JTextField();
+        Tabela = new javax.swing.JTable();
+        NomeClienteInput = new javax.swing.JTextField();
         LabelNomeCliente = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
-        LabelAddProdutos = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         InputNomeProduto = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         InputCodigoProduto = new javax.swing.JTextField();
         PesquisarCodigoBtn = new javax.swing.JButton();
         PesquisarNomeBtn = new javax.swing.JButton();
-        jLabel4 = new javax.swing.JLabel();
+        jSeparator1 = new javax.swing.JSeparator();
+        jSeparator2 = new javax.swing.JSeparator();
+        jLabel5 = new javax.swing.JLabel();
+        jSeparator3 = new javax.swing.JSeparator();
+        AbrirComandaBtn = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setResizable(false);
 
         NovaComandaTitulo.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        NovaComandaTitulo.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         NovaComandaTitulo.setText("Nova Comanda");
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        Tabela.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -61,7 +87,7 @@ public class NovaComanda extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(Tabela);
 
         LabelNomeCliente.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         LabelNomeCliente.setText("Insira o nome do cliente:");
@@ -70,11 +96,10 @@ public class NovaComanda extends javax.swing.JFrame {
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("Produtos");
 
-        LabelAddProdutos.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        LabelAddProdutos.setText("Adicionar produtos");
-
+        jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel2.setText("Nome do produto");
 
+        jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel3.setText("Código do produto");
 
         PesquisarCodigoBtn.setText("Pesquisar com código");
@@ -91,113 +116,186 @@ public class NovaComanda extends javax.swing.JFrame {
             }
         });
 
-        jLabel4.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jLabel4.setText("Ou");
+        jLabel5.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel5.setText("Adicionar Produtos");
+
+        AbrirComandaBtn.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        AbrirComandaBtn.setText("Abrir comanda");
+        AbrirComandaBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                AbrirComandaBtnActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(431, 431, 431)
-                        .addComponent(NovaComandaTitulo))
+                        .addComponent(NovaComandaTitulo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addContainerGap())
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(39, 39, 39)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jScrollPane1))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(0, 37, Short.MAX_VALUE)
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 710, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addGap(66, 66, 66)
-                                .addComponent(LabelNomeCliente)
-                                .addGap(18, 18, 18)
-                                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(194, 194, 194)
-                                .addComponent(LabelAddProdutos))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(35, 35, 35)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(jLabel3)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(InputCodigoProduto))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(jLabel2)
-                                        .addGap(24, 24, 24)
-                                        .addComponent(InputNomeProduto, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addGap(46, 46, 46)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(PesquisarNomeBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(PesquisarCodigoBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                        .addGap(215, 215, 215)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                                            .addComponent(PesquisarCodigoBtn)
+                                            .addComponent(InputCodigoProduto, javax.swing.GroupLayout.PREFERRED_SIZE, 293, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(PesquisarNomeBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(InputNomeProduto, javax.swing.GroupLayout.PREFERRED_SIZE, 295, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addGap(3, 3, 3))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                        .addGap(29, 29, 29)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 484, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, 481, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(jLabel3)
+                                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                    .addComponent(jLabel2)
+                                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                                        .addGroup(layout.createSequentialGroup()
+                                                            .addComponent(jLabel5)
+                                                            .addGap(142, 142, 142))
+                                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                                                .addComponent(LabelNomeCliente)
+                                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                                .addComponent(NomeClienteInput, javax.swing.GroupLayout.PREFERRED_SIZE, 292, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                            .addComponent(jSeparator2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 469, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                                .addGap(9, 9, 9)))))
+                                .addGap(46, 46, 46))
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jLabel4)
-                                .addGap(220, 220, 220)))))
-                .addContainerGap(18, Short.MAX_VALUE))
+                                .addComponent(AbrirComandaBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(190, 190, 190))))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(39, 39, 39)
                 .addComponent(NovaComandaTitulo)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 46, Short.MAX_VALUE)
+                .addGap(29, 29, 29)
                 .addComponent(jLabel1)
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(LabelNomeCliente)
-                            .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(NomeClienteInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(18, 18, 18)
-                        .addComponent(LabelAddProdutos)
-                        .addGap(83, 83, 83)
+                        .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel5)
+                        .addGap(27, 27, 27)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel2)
-                            .addComponent(InputNomeProduto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(PesquisarNomeBtn))
-                        .addGap(14, 14, 14)
-                        .addComponent(jLabel4)
+                            .addComponent(InputNomeProduto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addComponent(PesquisarNomeBtn)
+                        .addGap(25, 25, 25)
+                        .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel3)
-                            .addComponent(InputCodigoProduto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(PesquisarCodigoBtn)))
+                            .addComponent(InputCodigoProduto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addComponent(PesquisarCodigoBtn)
+                        .addGap(18, 18, 18)
+                        .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(74, 74, 74)
+                        .addComponent(AbrirComandaBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(150, 150, 150))
+                .addContainerGap(55, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+        public static void adicionarProduto(Produtos produto, int Quantidade) {
+        Produtos NovoProduto = new Produtos();
+        NovoProduto.setCodigo(produto.getCodigo());
+        NovoProduto.setNome(produto.getNome());
+        NovoProduto.setUnidade(produto.getUnidade());
+        NovoProduto.setPreco(produto.getPreco());
+        NovoProduto.setQuantidadeDisponivel(produto.getQuantidadeDisponivel());
+        NovoProduto.setDataUltimaVenda(produto.getDataUltimaVenda());
+        NovoProduto.setQuantide(Quantidade);
+
+        listaDeProdutos.add(NovoProduto);
+        modelo.fireTableDataChanged();
+
+    }
+
+    private static boolean existeNoCarrinho(Produtos produto) {
+        for (Produtos produtoLista : listaDeProdutos) {
+            if (produtoLista.getCodigo().equals(produto.getCodigo())) {
+                System.out.println("Item já está no carrinho");
+                return true;
+            }
+        }
+        return false;
+    }
 
     private void PesquisarNomeBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_PesquisarNomeBtnActionPerformed
-       String PesquisaPorNome = InputNomeProduto.getText();
-       
+
+        try {
+            String PesquisaPorNome = InputNomeProduto.getText();
+            Produtos Produto = ProdutoControl.findProdutoByNome(PesquisaPorNome);
+            JanelaAddProdutoComanda add = new JanelaAddProdutoComanda(Produto);
+            add.setVisible(rootPaneCheckingEnabled);
+            add.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+            add.setLocationRelativeTo(this);
+        } catch (Exception Ex) {
+            JOptionPane.showMessageDialog(this, "Ocorreu um error ao adicionar produto.\nOu ele não pode ser encontrado\nDetalhes do error:\n\n" + Ex.getMessage(), "Ops! ocorreu um error", JOptionPane.YES_OPTION);
+        }
+
     }//GEN-LAST:event_PesquisarNomeBtnActionPerformed
 
     private void PesquisarCodigoBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_PesquisarCodigoBtnActionPerformed
 
-       try{
-           String PesquisaCodigo = InputCodigoProduto.getText();
+        try {
+            String PesquisaCodigo = InputCodigoProduto.getText();
 
-           int codigo = Integer.parseInt(PesquisaCodigo);
-           Produtos Produto = ProdutoControl.findProdutoByCodigo(codigo);
-                
-           int quest = JOptionPane.showConfirmDialog(this,"Localizamos o produto "+Produto.getNome()+" ("+Produto.getCodigo()+")\nDeseja adicionar a comanda ?", "Adicionar produto à comanda ?", JOptionPane.YES_NO_OPTION );
-           if(quest == JOptionPane.YES_OPTION){
-           System.out.println("Usuário escolheu Sim.");
-           }
-           
-       }
-      catch(Exception Ex) {
-         JOptionPane.showMessageDialog(this,"Ocorreu um error ao adicionar produto.\nOu ele não pode ser encontrado\nDetalhes do error:\n\n"+Ex.getMessage(), "Ops! ocorreu um error", JOptionPane.YES_OPTION);
-      }
-       
-       
+            int codigo = Integer.parseInt(PesquisaCodigo);
+            Produtos Produto = ProdutoControl.findProdutoByCodigo(codigo);
+
+            JanelaAddProdutoComanda add = new JanelaAddProdutoComanda(Produto);
+            add.setVisible(rootPaneCheckingEnabled);
+            add.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+            add.setLocationRelativeTo(this);
+
+        } catch (Exception Ex) {
+            JOptionPane.showMessageDialog(this, "Ocorreu um error ao adicionar produto.\nOu ele não pode ser encontrado\nDetalhes do error:\n\n" + Ex.getMessage(), "Ops! ocorreu um error", JOptionPane.YES_OPTION);
+        }
+
 
     }//GEN-LAST:event_PesquisarCodigoBtnActionPerformed
+
+    private void AbrirComandaBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AbrirComandaBtnActionPerformed
+        // TODO add your handling code here:
+        ComandaController Control = new ComandaController();
+        ProdutosComandaController ProdutoControl = new ProdutosComandaController();
+        int codigo = Control.createOne(NomeClienteInput.getText());
+        int id = Control.findIdByCodigo(codigo);
+        if (listaDeProdutos.isEmpty()) {
+            System.out.println("Comanda sem itemns");
+        } else {
+            for (Produtos produto : listaDeProdutos) {
+                ProdutoControl.createOne(id, produto.getId());
+            }
+        }
+
+    }//GEN-LAST:event_AbrirComandaBtnActionPerformed
 
     /**
      * @param args the command line arguments
@@ -235,19 +333,22 @@ public class NovaComanda extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton AbrirComandaBtn;
     private javax.swing.JTextField InputCodigoProduto;
     private javax.swing.JTextField InputNomeProduto;
-    private javax.swing.JLabel LabelAddProdutos;
     private javax.swing.JLabel LabelNomeCliente;
+    private javax.swing.JTextField NomeClienteInput;
     private javax.swing.JLabel NovaComandaTitulo;
     private javax.swing.JButton PesquisarCodigoBtn;
     private javax.swing.JButton PesquisarNomeBtn;
+    private javax.swing.JTable Tabela;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JTextField jTextField1;
+    private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JSeparator jSeparator2;
+    private javax.swing.JSeparator jSeparator3;
     // End of variables declaration//GEN-END:variables
 }

@@ -26,6 +26,8 @@ import javax.persistence.Table;
     @NamedQuery(name = "Comandas.findByStatus", query = "SELECT c FROM Comandas c WHERE c.status = :status")})
 public class Comandas implements Serializable {
 
+    @Column(name = "codigo")
+    private Integer codigo;
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
@@ -99,5 +101,14 @@ public class Comandas implements Serializable {
     public String toString() {
         return "Models.Comandas[ idComanda=" + idComanda + " ]";
     }
-    
+
+    public Integer getCodigo() {
+        return codigo;
+    }
+
+    public void setCodigo(Integer codigo) {
+        this.codigo = codigo;
+    }
+
+
 }

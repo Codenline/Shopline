@@ -3,15 +3,10 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Projetos/shopline/src/META-INF/persistence.xml</file>
-            <file>file:/C:/Projetos/shopline/src/Controllers/ComandaController.java</file>
-            <file>file:/C:/Projetos/shopline/src/Models/Comandas.java</file>
+            <file>file:/C:/Projetos/shopline/src/Models/TableModel.java</file>
             <file>file:/C:/Projetos/shopline/src/Viwes/Main.java</file>
-            <file>file:/C:/Projetos/shopline/src/Viwes/Login.java</file>
-            <file>file:/C:/Projetos/shopline/src/Modules/Temas.java</file>
-            <file>file:/C:/Projetos/shopline/src/Controllers/ProdutoController.java</file>
-            <file>file:/C:/Projetos/shopline/src/Viwes/GerenciadorProdutos.java</file>
-            <file>file:/C:/Projetos/shopline/src/Viwes/AdicionarProduto.java</file>
+            <file>file:/C:/Projetos/shopline/src/Viwes/NovaComanda.java</file>
+            <file>file:/C:/Projetos/shopline/src/Viwes/JanelaAddProdutoComanda.java</file>
             <file>file:/C:/Projetos/shopline/src/Models/TableModelProdutos.java</file>
         </group>
     </open-files>

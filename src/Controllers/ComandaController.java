@@ -20,7 +20,7 @@ public class ComandaController {
     private final EntityManager em = emf.createEntityManager();
 
     // Procura por um produto com um ID especifico
-    public  Comandas findOne(int id) {
+    public Comandas findOne(int id) {
         em.getTransaction().begin();
         Comandas entity = em.find(Comandas.class, 1);
         em.getTransaction().commit();
@@ -28,7 +28,6 @@ public class ComandaController {
         Integer IdComanda = entity.getIdComanda();
         String NomeCliente = entity.getNomeCliente();
         String Status = entity.getStatus();
-
 
         if (entity != null) {
 
@@ -48,39 +47,54 @@ public class ComandaController {
 
     }
 
-    public int ultimoCódigo(){
-        int id;
+    public int ultimoCódigo() {
+        int id = 0;
         em.getTransaction().begin();
-        TypedQuery<Integer> query = em.createQuery("SELECT MAX(e.codigo) FROM comandas e", Integer.class);
-        id = query.getSingleResult();
-        if(em.getTransaction() != null && em.getTransaction().isActive()){
-        em.getTransaction().rollback();
+        TypedQuery<Integer> query = em.createQuery("SELECT MAX(e.codigo) FROM Comandas e", Integer.class);
+        Integer Resultado = query.getSingleResult();
+        if (Resultado != null) {
+            id = Resultado;
         }
-        else{
-        em.close();
-        emf.close();
+        if (em.getTransaction() != null && em.getTransaction().isActive()) {
+            em.getTransaction().rollback();
+        } else {
+            em.close();
+            emf.close();
         }
 
-
-        
         return id;
     }
-    
-    public Comandas findByNomeCliente(int NomeCliente){
-       String jpql = "SELECT p FROM comandas p WHERE p.nome_cliente = :nome_cliente";
+
+    public int findIdByCodigo(int codigo) {
+        String jpql = "SELECT p FROM Comandas p WHERE p.codigo = :codigo";
         Comandas ComandaFinal;
-    em.getTransaction().begin();  
-    var query = em.createQuery(jpql, Comandas.class);
-    query.setParameter("nome_cliente", NomeCliente);
+        em.getTransaction().begin();
+        var query = em.createQuery(jpql, Comandas.class);
+        query.setParameter("codigo", codigo);
 
-    List<Comandas> resultados = query.getResultList();
+        List<Comandas> resultados = query.getResultList();
 
-    em.getTransaction().commit();
-    ComandaFinal = resultados.get(0);
-   
-    return ComandaFinal;
+        em.getTransaction().commit();
+        ComandaFinal = resultados.get(0);
+
+        return ComandaFinal.getIdComanda();
     }
-    
+
+    public Comandas findByNomeCliente(int NomeCliente) {
+        String jpql = "SELECT p FROM comandas p WHERE p.nome_cliente = :nome_cliente";
+        Comandas ComandaFinal;
+        em.getTransaction().begin();
+        var query = em.createQuery(jpql, Comandas.class);
+        query.setParameter("nome_cliente", NomeCliente);
+
+        List<Comandas> resultados = query.getResultList();
+
+        em.getTransaction().commit();
+        ComandaFinal = resultados.get(0);
+
+        return ComandaFinal;
+    }
+
     public void diminiorEtoque(List<Produtos> listaDeProdutos) {
         for (Produtos produto : listaDeProdutos) {
             int quantidadeDispo = produto.getQuantidadeDisponivel();
@@ -101,18 +115,17 @@ public class ComandaController {
             }
             em.merge(produtoChanged);
             em.getTransaction().commit();
-           
-            
+
         }
-         em.close();
+        em.close();
     }
 
     // Lista todos os produtos da base
     public List<Comandas> findMany() {
-       
+
         em.getTransaction().begin();
 
-        String jpql = "SELECT p FROM Produtos p"; // Consulta JPQL para selecionar todos os registros
+        String jpql = "SELECT p FROM comandas p"; // Consulta JPQL para selecionar todos os registros
         TypedQuery<Comandas> query = em.createQuery(jpql, Comandas.class);
 
         List<Comandas> Comandas = query.getResultList(); // Obtém todos os registros da tabela
@@ -124,15 +137,18 @@ public class ComandaController {
     }
 
     // Cria uma nova entry de produto.
-    public void createOne(String NomeCliente) {
+    public int createOne(String NomeCliente) {
 
         Comandas NovaComanda = new Comandas();
         NovaComanda.setNomeCliente(NomeCliente);
         NovaComanda.setStatus("aberto");
+        NovaComanda.setCodigo(ultimoCódigo() + 1);
         em.getTransaction().begin();
         em.persist(NovaComanda);
         em.getTransaction().commit();
         em.close();
+
+        return NovaComanda.getCodigo();
     }
     // exclui um produto pelo ID.
 
