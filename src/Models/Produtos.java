@@ -66,7 +66,7 @@ public class Produtos implements Serializable {
         this.id = id;
     }
     
-    public void setQuantide(int quantidade){
+    public void setQuantidade(int quantidade){
     this.quantidade = quantidade;
     }
     

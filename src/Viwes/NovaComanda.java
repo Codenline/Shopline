@@ -27,7 +27,7 @@ public class NovaComanda extends javax.swing.JFrame {
     private ProdutoController ProdutoControl = new ProdutoController();
     private static List<Produtos> listaDeProdutos = new ArrayList<>();
     private static TableModel modelo = new TableModel(listaDeProdutos);
-
+    private   ComandaController Control = new ComandaController();
     /**
      * Creates new form NovaComanda
      */
@@ -229,7 +229,7 @@ public class NovaComanda extends javax.swing.JFrame {
         NovoProduto.setPreco(produto.getPreco());
         NovoProduto.setQuantidadeDisponivel(produto.getQuantidadeDisponivel());
         NovoProduto.setDataUltimaVenda(produto.getDataUltimaVenda());
-        NovoProduto.setQuantide(Quantidade);
+        NovoProduto.setQuantidade(Quantidade);
 
         listaDeProdutos.add(NovoProduto);
         modelo.fireTableDataChanged();
@@ -283,17 +283,22 @@ public class NovaComanda extends javax.swing.JFrame {
 
     private void AbrirComandaBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AbrirComandaBtnActionPerformed
         // TODO add your handling code here:
-        ComandaController Control = new ComandaController();
-        ProdutosComandaController ProdutoControl = new ProdutosComandaController();
+      
+    
         int codigo = Control.createOne(NomeClienteInput.getText());
+    
         int id = Control.findIdByCodigo(codigo);
-        if (listaDeProdutos.isEmpty()) {
-            System.out.println("Comanda sem itemns");
-        } else {
-            for (Produtos produto : listaDeProdutos) {
-                ProdutoControl.createOne(id, produto.getId());
-            }
-        }
+          
+         ProdutosComandaController ProdutoControl = new ProdutosComandaController();
+        
+        ProdutoControl.createMany(listaDeProdutos, id);
+           Comandas comanda = new Comandas();
+           comanda.setNomeCliente(NomeClienteInput.getText());
+           comanda.setStatus("aberto");
+           comanda.setCodigo(codigo);
+ 
+        Main.atualizarTabelaComandas(comanda);
+        dispose();
 
     }//GEN-LAST:event_AbrirComandaBtnActionPerformed
 

@@ -26,6 +26,9 @@ import javax.persistence.Table;
     @NamedQuery(name = "Produtoscomanda.findByIdProduto", query = "SELECT p FROM Produtoscomanda p WHERE p.idProduto = :idProduto")})
 public class Produtoscomanda implements Serializable {
 
+    @Column(name = "quantidade")
+    private Integer quantidade;
+
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
@@ -98,6 +101,14 @@ public class Produtoscomanda implements Serializable {
     @Override
     public String toString() {
         return "Models.Produtoscomanda[ id=" + id + " ]";
+    }
+
+    public Integer getQuantidade() {
+        return quantidade;
+    }
+
+    public void setQuantidade(Integer quantidade) {
+        this.quantidade = quantidade;
     }
     
 }

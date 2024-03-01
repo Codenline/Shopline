@@ -4,10 +4,14 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
             <file>file:/C:/Projetos/shopline/src/Models/TableModel.java</file>
-            <file>file:/C:/Projetos/shopline/src/Viwes/Main.java</file>
             <file>file:/C:/Projetos/shopline/src/Viwes/NovaComanda.java</file>
-            <file>file:/C:/Projetos/shopline/src/Viwes/JanelaAddProdutoComanda.java</file>
-            <file>file:/C:/Projetos/shopline/src/Models/TableModelProdutos.java</file>
+            <file>file:/C:/Projetos/shopline/src/Viwes/Main.java</file>
+            <file>file:/C:/Projetos/shopline/src/Models/TableModelComandas.java</file>
+            <file>file:/C:/Projetos/shopline/src/Controllers/ProdutosComandaController.java</file>
+            <file>file:/C:/Projetos/shopline/src/Models/Produtoscomanda.java</file>
+            <file>file:/C:/Projetos/shopline/src/Models/Produtos.java</file>
+            <file>file:/C:/Projetos/shopline/src/Viwes/GerenciadorProdutos.java</file>
+            <file>file:/C:/Projetos/shopline/src/Viwes/AdicionarProduto.java</file>
         </group>
     </open-files>
 </project-private>

@@ -4,6 +4,7 @@
  */
 package Viwes;
 
+import Controllers.ProdutoController;
 import Models.Produtos;
 import javax.swing.JOptionPane;
 
@@ -217,7 +218,12 @@ public class JanelaAddProdutoComanda extends javax.swing.JFrame {
           JOptionPane.showMessageDialog(this, "Estoque insuficiente", "Ops, parece que a não temos essa quantidade :/", JOptionPane.WARNING_MESSAGE);
          }
          else{
+            int quantidadeFinal = Produto.getQuantidadeDisponivel() - quantidade;
+             ProdutoController ProdutoEstoque = new ProdutoController();
+             ProdutoEstoque.alterarEstoqueProdutoUnitario(Produto, quantidadeFinal);
             NovaComanda.adicionarProduto(Produto,quantidade);
+            
+            dispose();
          }
         
         

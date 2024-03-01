@@ -103,6 +103,14 @@ public class ProdutoController {
     return proutoFinal;
     }
     
+        public void alterarEstoqueProdutoUnitario(Produtos Produto, int quantidadadeAtual){
+        em.getTransaction().begin();
+        Produto.setQuantidadeDisponivel(quantidadadeAtual);
+            em.merge(Produto);
+            em.getTransaction().commit();
+            em.close();
+    }
+    
     public void diminiorEtoque(List<Produtos> listaDeProdutos) {
         for (Produtos produto : listaDeProdutos) {
             int quantidadeDispo = produto.getQuantidadeDisponivel();

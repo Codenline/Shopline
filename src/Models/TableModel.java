@@ -59,7 +59,7 @@ public class TableModel extends AbstractTableModel {
             }
             case 2 -> {
             }
-            case 3 -> produto.setQuantide(5);
+            case 3 -> produto.setQuantidade(5);
         }
         fireTableCellUpdated(rowIndex, columnIndex);
     }

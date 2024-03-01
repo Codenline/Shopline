@@ -65,19 +65,29 @@ public class ComandaController {
         return id;
     }
 
-    public int findIdByCodigo(int codigo) {
-        String jpql = "SELECT p FROM Comandas p WHERE p.codigo = :codigo";
-        Comandas ComandaFinal;
-        em.getTransaction().begin();
-        var query = em.createQuery(jpql, Comandas.class);
-        query.setParameter("codigo", codigo);
-
-        List<Comandas> resultados = query.getResultList();
-
-        em.getTransaction().commit();
-        ComandaFinal = resultados.get(0);
-
-        return ComandaFinal.getIdComanda();
+ public int findIdByCodigo(int codigo) {
+         EntityManagerFactory emf2 = Persistence.createEntityManagerFactory("shopLinePU");
+          EntityManager em2 = emf2.createEntityManager();   
+     try {
+          
+            em2.getTransaction().begin();
+            String jpql = "SELECT p FROM Comandas p WHERE p.codigo = :codigo";
+            TypedQuery<Comandas> query = em2.createQuery(jpql, Comandas.class);
+            query.setParameter("codigo", codigo);
+            
+            List<Comandas> resultados = query.getResultList();
+            em2.getTransaction().commit();
+            em2.close();
+            if (!resultados.isEmpty()) {
+                Comandas comandaFinal = resultados.get(0);
+                return comandaFinal.getCodigo();
+            } else {
+                return -1; // ou algum outro valor padrão para indicar que nenhum resultado foi encontrado
+            }
+        } catch (Exception e) {
+            System.out.println(e); 
+            throw e; // ou trate a exceção de alguma forma apropriada
+        } 
     }
 
     public Comandas findByNomeCliente(int NomeCliente) {
@@ -94,38 +104,15 @@ public class ComandaController {
 
         return ComandaFinal;
     }
-
-    public void diminiorEtoque(List<Produtos> listaDeProdutos) {
-        for (Produtos produto : listaDeProdutos) {
-            int quantidadeDispo = produto.getQuantidadeDisponivel();
-            int quandidadeCarrihno = produto.getQuantidade();
-
-            produto.setQuantidadeDisponivel(quantidadeDispo - quandidadeCarrihno);
-            System.out.println("Produto" + produto.getNome() + "teve sua quantidade alterada para" + produto.getQuantidadeDisponivel());
-            em.getTransaction().begin();
-            Produtos produtoChanged = em.find(Produtos.class, produto.getId());
-            if (produtoChanged != null) {
-
-                produtoChanged.setCodigo(produto.getCodigo());
-                produtoChanged.setNome(produto.getNome());
-                produtoChanged.setUnidade(produto.getUnidade());
-                produtoChanged.setPreco(produto.getPreco());
-                produtoChanged.setQuantidadeDisponivel(produto.getQuantidadeDisponivel());
-                produtoChanged.setDataUltimaVenda(produto.getDataUltimaVenda());
-            }
-            em.merge(produtoChanged);
-            em.getTransaction().commit();
-
-        }
-        em.close();
-    }
+    
+    
 
     // Lista todos os produtos da base
     public List<Comandas> findMany() {
 
         em.getTransaction().begin();
 
-        String jpql = "SELECT p FROM comandas p"; // Consulta JPQL para selecionar todos os registros
+        String jpql = "SELECT p FROM Comandas p"; // Consulta JPQL para selecionar todos os registros
         TypedQuery<Comandas> query = em.createQuery(jpql, Comandas.class);
 
         List<Comandas> Comandas = query.getResultList(); // Obtém todos os registros da tabela

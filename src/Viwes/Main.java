@@ -8,9 +8,11 @@ import Controllers.ComandaController;
 import Controllers.ItemVendaController;
 import Controllers.ProdutoController;
 import Controllers.VendasController;
+import Models.Comandas;
 import Models.DadosItemVenda;
 import Models.Produtos;
 import Models.TableModel;
+import Models.TableModelComandas;
 import Models.Vendas;
 import com.formdev.flatlaf.FlatLightLaf;
 import java.awt.Color;
@@ -32,8 +34,10 @@ import javax.swing.UnsupportedLookAndFeelException;
 public class Main extends javax.swing.JFrame {
 
     private static List<Produtos> listaDeProdutos = new ArrayList<>();
+    private static ComandaController ComandaController = new ComandaController();
+    private static List<Comandas> ListaComandas = ComandaController.findMany();
     private static TableModel modelo = new TableModel(listaDeProdutos);
-
+    private static  TableModelComandas  ModeloComanda = new TableModelComandas(ListaComandas);
     /**
      * Creates new form Main
      */
@@ -42,9 +46,7 @@ public class Main extends javax.swing.JFrame {
         initComponents();
         setLocationRelativeTo(null);
         //TableModel modelo = new TableModel(listaDeProdutos);
-        ComandaController comanda = new ComandaController();
-        
-       
+
         JTable tabela = new JTable(modelo);
          tabela.setFont(new Font("Arial", Font.PLAIN, 18)); 
         tabela.setShowVerticalLines(true);
@@ -52,7 +54,25 @@ public class Main extends javax.swing.JFrame {
         tabela.setGridColor(Color.gray);
         // Adicione a tabela a um JScrollPane (opcional)
         jScrollPane1.setViewportView(tabela);
+        
+               
+        // Definindo modelo da tabela de comandas
+         TabelaComanda.setModel(ModeloComanda);
+         TabelaComanda.setFont(new Font("Arial", Font.PLAIN, 18)); 
+        TabelaComanda.setShowVerticalLines(true);
+        TabelaComanda.setShowHorizontalLines(true);
+        TabelaComanda.setGridColor(Color.gray);
+     
+        jScrollPane2.setViewportView(TabelaComanda);
     }
+    
+        
+    public static void atualizarTabelaComandas(Comandas comanda){
+        ListaComandas.add(comanda);
+    ModeloComanda.fireTableDataChanged();
+    }
+    
+
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -98,7 +118,7 @@ public class Main extends javax.swing.JFrame {
         jTabbedPane2 = new javax.swing.JTabbedPane();
         jPanel6 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        TabelaComanda = new javax.swing.JTable();
         TituloComanda = new javax.swing.JLabel();
         CriarComandaBtn = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
@@ -307,7 +327,7 @@ public class Main extends javax.swing.JFrame {
 
         jTabbedPane2.setTabPlacement(javax.swing.JTabbedPane.LEFT);
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        TabelaComanda.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -318,7 +338,7 @@ public class Main extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane2.setViewportView(jTable1);
+        jScrollPane2.setViewportView(TabelaComanda);
 
         TituloComanda.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         TituloComanda.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -420,7 +440,7 @@ public class Main extends javax.swing.JFrame {
     private void botaoAtualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoAtualizarActionPerformed
         // TODO add your handling code here:
         modelo.fireTableDataChanged();
-        System.out.println(listaDeProdutos);
+      
     }//GEN-LAST:event_botaoAtualizarActionPerformed
 
     private void botaoAdicionarProdutoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoAdicionarProdutoActionPerformed
@@ -536,6 +556,7 @@ public class Main extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton CriarComandaBtn;
+    private javax.swing.JTable TabelaComanda;
     private javax.swing.JLabel Title;
     private javax.swing.JLabel TituloComanda;
     private javax.swing.JButton botaoAdicionarProduto;
@@ -571,7 +592,6 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JSeparator jSeparator3;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTabbedPane jTabbedPane2;
-    private javax.swing.JTable jTable1;
     private javax.swing.JTable tabela;
     private static javax.swing.JLabel totalCarrinho;
     // End of variables declaration//GEN-END:variables

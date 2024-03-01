@@ -201,7 +201,7 @@ public class AdicionarProduto extends javax.swing.JFrame {
           JOptionPane.showMessageDialog(this, "Estoque insuficiente", "Ops, parece que a não temos essa quantidade :/", JOptionPane.WARNING_MESSAGE);
          }
          else{
-         produtoSelecionado.setQuantide(valor);
+         produtoSelecionado.setQuantidade(valor);
          
          Main.adicionarProduto(produtoSelecionado);
          }

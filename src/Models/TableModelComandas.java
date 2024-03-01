@@ -6,16 +6,16 @@ import javax.swing.table.AbstractTableModel;
 
 public class TableModelComandas extends AbstractTableModel {
 
-    private List<Produtos> produtos;
-    private String[] colunas = {"Código", "Nome", "Preço", "Quantidade Disponivel"};
+    private List<Comandas> Comandas;
+    private String[] colunas = {"Cliente", "Código"};
 
-    public TableModelComandas(List<Produtos> produtos) {
-        this.produtos = produtos;
+    public TableModelComandas(List<Comandas> Comandas) {
+        this.Comandas = Comandas;
     }
 
     @Override
     public int getRowCount() {
-        return produtos.size();
+        return Comandas.size();
     }
 
     @Override
@@ -25,17 +25,12 @@ public class TableModelComandas extends AbstractTableModel {
 
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
-        Produtos produto = produtos.get(rowIndex);
+        Comandas Comanda = Comandas.get(rowIndex);
         switch (columnIndex) {
             case 0:
-                return produto.getCodigo();
+                return Comanda.getNomeCliente();
             case 1:
-                return produto.getNome();
-            case 2:
-                return produto.getPreco();
-            case 3:
-                return produto.getQuantidadeDisponivel();
-
+                return Comanda.getCodigo();
             default:
                 return null;
         }
