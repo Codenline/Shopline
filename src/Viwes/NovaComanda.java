@@ -14,6 +14,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
@@ -28,11 +29,17 @@ public class NovaComanda extends javax.swing.JFrame {
     private static List<Produtos> listaDeProdutos = new ArrayList<>();
     private static TableModel modelo = new TableModel(listaDeProdutos);
     private   ComandaController Control = new ComandaController();
+    private ProdutosComandaController ProdutoComandacontroller = new ProdutosComandaController();
     /**
      * Creates new form NovaComanda
      */
-    public NovaComanda() {
+    public NovaComanda(Optional<Integer> Teste) {
+        if(Teste.isPresent()){
+           
+        ProdutoControl.FindProdutosComanda(Teste.get());
+        }
         initComponents();
+        
         JTable tabela = new JTable(modelo);
         tabela.setFont(new Font("Arial", Font.PLAIN, 18));
         tabela.setShowVerticalLines(true);
@@ -40,6 +47,7 @@ public class NovaComanda extends javax.swing.JFrame {
         tabela.setGridColor(Color.gray);
         // Adicione a tabela a um JScrollPane (opcional)
         jScrollPane1.setViewportView(tabela);
+       
     }
 
     /**
@@ -332,7 +340,7 @@ public class NovaComanda extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new NovaComanda().setVisible(true);
+                new NovaComanda(Optional.empty()).setVisible(true);
             }
         });
     }

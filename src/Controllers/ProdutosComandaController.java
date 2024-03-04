@@ -105,13 +105,13 @@ public class ProdutosComandaController {
     }
 
     // Lista todos os produtos da base
-    public List<Produtoscomanda> findMany() {
+    public List<Produtoscomanda> findManyFromComandaID(Integer id_comanda) {
 
         em.getTransaction().begin();
 
-        String jpql = "SELECT p FROM Produtoscomanda p"; // Consulta JPQL para selecionar todos os registros
+        String jpql = "SELECT pc.id_produto FROM produtos_comanda pc WHERE pc.id_comanda = :id_comanda"; // Consulta JPQL para selecionar todos os registros
         TypedQuery<Produtoscomanda> query = em.createQuery(jpql, Produtoscomanda.class);
-
+        query.setParameter("id_comanda", id_comanda);
         List<Produtoscomanda> Produtoscomanda = query.getResultList(); // Obtém todos os registros da tabela
 
         em.getTransaction().commit();
@@ -127,7 +127,7 @@ public class ProdutosComandaController {
         produto.setIdProduto(idProduto);
         produto.setIdComanda(idComanda);
         em.getTransaction().begin();
-        em.persist(produto);
+    em.persist(produto);
         em.getTransaction().commit();
         em.close();
 

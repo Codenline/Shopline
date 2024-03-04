@@ -17,8 +17,11 @@ import Models.Vendas;
 import com.formdev.flatlaf.FlatLightLaf;
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFrame;
@@ -26,6 +29,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 /**
  *
@@ -35,7 +40,7 @@ public class Main extends javax.swing.JFrame {
 
     private static List<Produtos> listaDeProdutos = new ArrayList<>();
     private static ComandaController ComandaController = new ComandaController();
-    private static List<Comandas> ListaComandas = ComandaController.findMany();
+    private static List<Comandas> ListaComandas = ComandaController.findComadasAbertas();
     private static TableModel modelo = new TableModel(listaDeProdutos);
     private static  TableModelComandas  ModeloComanda = new TableModelComandas(ListaComandas);
     /**
@@ -62,7 +67,36 @@ public class Main extends javax.swing.JFrame {
         TabelaComanda.setShowVerticalLines(true);
         TabelaComanda.setShowHorizontalLines(true);
         TabelaComanda.setGridColor(Color.gray);
+        /*     TabelaComanda.getSelectionModel().addListSelectionListener(new ListSelectionListener(){;
+        @Override
+        public void valueChanged(ListSelectionEvent e) {
+        if (!e.getValueIsAdjusting()) {
+        int selectedRow = TabelaComanda.getSelectedRow();
+        if (selectedRow != -1) { // -1 significa que nenhuma linha está selecionada
+        // Aqui você pode chamar sua função, por exemplo:
+        System.out.println("Row " + selectedRow + " selected.");
+        }
+        }
+        }
+        });*/
      
+     
+     TabelaComanda.addMouseListener( new MouseAdapter(){
+           @Override
+            public void mouseClicked(MouseEvent e) {
+                if (e.getClickCount() == 2) { // Verificar se foi um clique duplo
+                    int row = TabelaComanda.getSelectedRow(); // Obter a linha selecionada
+                    int column = TabelaComanda.getSelectedColumn(); // Obter a coluna selecionada
+                    Object value = TabelaComanda.getValueAt(row, 1); // Obter o valor da célula
+                    Object NomeComanda = TabelaComanda.getValueAt(row, 0);
+                    int IdComanda = Integer.parseInt(""+value);
+                     EditarComanda comanda = new EditarComanda(IdComanda,""+NomeComanda);
+                     comanda.setVisible(rootPaneCheckingEnabled);
+                     comanda.setLocationRelativeTo(jTabbedPane2);
+                     comanda.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                }
+            }
+     });
         jScrollPane2.setViewportView(TabelaComanda);
     }
     
@@ -121,10 +155,13 @@ public class Main extends javax.swing.JFrame {
         TabelaComanda = new javax.swing.JTable();
         TituloComanda = new javax.swing.JLabel();
         CriarComandaBtn = new javax.swing.JButton();
+        jLabel8 = new javax.swing.JLabel();
         jPanel4 = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Shopline PDV");
+        setMaximumSize(new java.awt.Dimension(1394, 855));
+        setMinimumSize(new java.awt.Dimension(1394, 855));
 
         jPanel1.setBackground(new java.awt.Color(0, 0, 0));
 
@@ -246,7 +283,7 @@ public class Main extends javax.swing.JFrame {
                 .addGap(50, 50, 50)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 652, Short.MAX_VALUE)
+                        .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 779, Short.MAX_VALUE)
                         .addGap(54, 54, 54))
                     .addComponent(jScrollPane1))
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
@@ -352,6 +389,10 @@ public class Main extends javax.swing.JFrame {
             }
         });
 
+        jLabel8.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jLabel8.setForeground(new java.awt.Color(153, 153, 153));
+        jLabel8.setText("Clique duas vezes na comanda para editar ou encerrar ");
+
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
         jPanel6Layout.setHorizontalGroup(
@@ -359,22 +400,27 @@ public class Main extends javax.swing.JFrame {
             .addGroup(jPanel6Layout.createSequentialGroup()
                 .addGap(28, 28, 28)
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(CriarComandaBtn)
-                    .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 684, Short.MAX_VALUE)
-                        .addComponent(TituloComanda, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                .addContainerGap(289, Short.MAX_VALUE))
+                    .addComponent(TituloComanda, javax.swing.GroupLayout.PREFERRED_SIZE, 684, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel6Layout.createSequentialGroup()
+                        .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(jLabel8, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 684, Short.MAX_VALUE))
+                        .addGap(18, 18, 18)
+                        .addComponent(CriarComandaBtn)))
+                .addContainerGap(213, Short.MAX_VALUE))
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel6Layout.createSequentialGroup()
                 .addGap(28, 28, 28)
                 .addComponent(TituloComanda)
-                .addGap(18, 18, 18)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 596, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(37, 37, 37)
-                .addComponent(CriarComandaBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(36, Short.MAX_VALUE))
+                .addGap(53, 53, 53)
+                .addComponent(jLabel8)
+                .addGap(11, 11, 11)
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 596, Short.MAX_VALUE)
+                    .addComponent(CriarComandaBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(48, 48, 48))
         );
 
         jTabbedPane2.addTab("Comandas Abertas", jPanel6);
@@ -402,7 +448,7 @@ public class Main extends javax.swing.JFrame {
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1138, Short.MAX_VALUE)
+            .addGap(0, 1265, Short.MAX_VALUE)
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -478,7 +524,7 @@ public class Main extends javax.swing.JFrame {
     }//GEN-LAST:event_gerenciadorProdutosActionPerformed
 
     private void CriarComandaBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CriarComandaBtnActionPerformed
-       NovaComanda comanda = new NovaComanda();
+       NovaComanda comanda = new NovaComanda(Optional.empty());
        comanda.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
        comanda.setLocationRelativeTo(this);
        comanda.setVisible(true);
@@ -577,6 +623,7 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;

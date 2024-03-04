@@ -108,11 +108,11 @@ public class ComandaController {
     
 
     // Lista todos os produtos da base
-    public List<Comandas> findMany() {
+    public List<Comandas> findComadasAbertas() {
 
         em.getTransaction().begin();
 
-        String jpql = "SELECT p FROM Comandas p"; // Consulta JPQL para selecionar todos os registros
+        String jpql = "SELECT p FROM Comandas p WHERE p.status = 'aberto'"; // Consulta JPQL para selecionar todos os registros
         TypedQuery<Comandas> query = em.createQuery(jpql, Comandas.class);
 
         List<Comandas> Comandas = query.getResultList(); // Obtém todos os registros da tabela

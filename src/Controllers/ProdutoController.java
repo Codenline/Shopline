@@ -2,6 +2,8 @@
 package Controllers;
 
 import Models.Produtos;
+import Models.Produtoscomanda;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -153,6 +155,31 @@ public class ProdutoController {
         return produtos;
     }
 
+    public  List<Produtos>  FindProdutosComanda(Integer id_comanda){
+  
+        List<Produtos> ListaDeProdutos = new ArrayList<>();
+        em.getTransaction().begin();
+
+        String jpql = "SELECT pc FROM Produtoscomanda pc WHERE pc.idComanda = :id_comanda"; // Consulta JPQL para selecionar todos os registros
+        TypedQuery<Produtoscomanda> query = em.createQuery(jpql, Produtoscomanda.class);
+        query.setParameter("id_comanda", id_comanda);
+        List<Produtoscomanda> ProdutosComandaLista = query.getResultList(); // Obtém todos os registros da tabela
+
+        em.getTransaction().commit();
+
+             
+        for(Produtoscomanda Produtos: ProdutosComandaLista ){
+          Produtos ProdutoRow = findProdutoByCodigo(Produtos.getIdProduto());
+          ProdutoRow.setQuantidade(Produtos.getQuantidade());
+           System.out.println(ProdutoRow.getNome());
+          ListaDeProdutos.add(ProdutoRow);
+        }
+        
+        return ListaDeProdutos;
+    
+
+    }
+    
     // Cria uma nova entry de produto.
     public void createOne(int codigo, String nome, int unidade, double preco, int quantidadeDisponivel, String dataUltimaVenda) {
 

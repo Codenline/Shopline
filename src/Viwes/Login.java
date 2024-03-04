@@ -151,7 +151,7 @@ public class Login extends javax.swing.JFrame {
     }//GEN-LAST:event_senhaActionPerformed
 
     private void BotaoLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotaoLoginActionPerformed
-        if("cliente".equals(login.getText()) && "123456".equals(senha.getText())){
+        if("Andre".equals(login.getText()) && "123456".equals(senha.getText())){
         dispose();
         Main main = new Main();
         main.setVisible(true);
@@ -163,7 +163,7 @@ public class Login extends javax.swing.JFrame {
     }//GEN-LAST:event_BotaoLoginActionPerformed
 
     private void BotaoLoginKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_BotaoLoginKeyPressed
-        if("cliente".equals(login.getText()) && "123456".equals(senha.getText())){
+        if("Andre".equals(login.getText()) && "123456".equals(senha.getText())){
         dispose();
         Main main = new Main();
         main.setVisible(true);
